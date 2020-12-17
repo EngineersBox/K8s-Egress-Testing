@@ -1,0 +1,35 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: pyserver
+  labels:
+    app: pyserver
+spec:
+  containers:
+  - name: pyserver
+    image: localhost:5000/pyserver:0.1
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: pyserver
+spec:
+  selector:
+    app: pyserver
+  ports:
+  # Port used by the Docker image
+  - port: 8080
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: pyserver-ingress
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+          serviceName: pyserver
+          servicePort: 8080
+---
