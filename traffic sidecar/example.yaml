@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: web
+  name: web-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - name: web-app
+        image: nginx
+        imagePullPolicy: Always        
+        ports:
+        - containerPort: 80
+          protocol: TCP
+      - name: tcpdumper
+        image: docker.io/dockersec/tcpdump
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-svc
+  namespace: default
+spec:
+  ports:
+  - nodePort: 30002
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: web
+  type: NodePort
