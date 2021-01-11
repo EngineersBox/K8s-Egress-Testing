@@ -20,3 +20,6 @@ cd dns-discovery
 # Deploy the dns-discovery module
 make install
 cd -
+
+# Create a tunnell to the wed-app service
+minikube service web-app
